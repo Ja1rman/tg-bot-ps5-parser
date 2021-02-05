@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from telebot import TeleBot 
+import telebot
 import requests
 import time
 
-bot = TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
+bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ozonparser'
 
 urls = ["https://www.ozon.ru/context/detail/id/207702520/", 
