@@ -21,5 +21,4 @@ if __name__ == "__main__":
                 status = response[response.find('isAvailable')+13:]
                 status = status[:status.find(',')]
                 if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
-            time.sleep(0.3)
         except: pass
