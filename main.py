@@ -78,13 +78,13 @@ def goods(url):
 
 if __name__ == "__main__":
     threads = []
-    #for i in range(len(ozonUrls)):
-    #    threads.append(threading.Thread(target=(ozon), args=(ozonUrls[i],)))
-    #    threads[-1].start()
+    for i in range(len(ozonUrls)):
+        threads.append(threading.Thread(target=(ozon), args=(ozonUrls[i],)))
+        threads[-1].start()
     
-    #for i in range(len(wildberriesUrls)):
-    #    threads.append(threading.Thread(target=(wildberries), args=(wildberriesUrls[i],)))
-    #    threads[-1].start()
+    for i in range(len(wildberriesUrls)):
+        threads.append(threading.Thread(target=(wildberries), args=(wildberriesUrls[i],)))
+        threads[-1].start()
 
     #for i in range(len(citilinkUrls)):
     #    threads.append(threading.Thread(target=(citilink), args=(citilinkUrls[i],)))
