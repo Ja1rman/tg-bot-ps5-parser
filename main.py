@@ -7,7 +7,7 @@ import traceback
 import threading
 
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
-CHANNEL = '@ozonparser'
+CHANNEL = '@ps5parser'
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
         "https://www.ozon.ru/context/detail/id/207702520/", 
@@ -15,9 +15,6 @@ ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
         "https://www.ozon.ru/context/detail/id/178337786/",
         "https://www.ozon.ru/context/detail/id/173667655/",
         "https://www.ozon.ru/context/detail/id/178715781"]
-
-wildberriesUrls = ["https://www.wildberries.ru/catalog/15298664/detail.aspx",
-                   "https://www.wildberries.ru/catalog/15298663/detail.aspx"]
 
 def ozon(url):
     while True:
@@ -31,6 +28,9 @@ def ozon(url):
             if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
+wildberriesUrls = ["https://www.wildberries.ru/catalog/15298664/detail.aspx",
+                   "https://www.wildberries.ru/catalog/15298663/detail.aspx"]
+
 def wildberries(url):
     while True:
         try:
@@ -42,13 +42,54 @@ def wildberries(url):
             status = status[:status.find(',')]
             if status == 'false': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
+'''
+citilinkUrls = ["https://www.citilink.ru/catalog/for_gamers/games_consoles/consoles/1438618/",
+                "https://www.citilink.ru/catalog/for_gamers/games_consoles/consoles/1438620/"]
+
+def citilink(url):
+    while True:
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            response = requests.get(url, headers=headers)
+            print(response.status_code)
+            r = response.text
+            status = r[r.find('productAvailability"')+22:]
+            status = status[:status.find('",')]
+            if status == 'available': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+        except: print(traceback.format_exc())
+'''
+
+goodsUrls = ["https://goods.ru/catalog/details/igrovaya-pristavka-sony-playstation-5-825gb-100026864564",
+             "https://goods.ru/catalog/details/igrovaya-pristavka-sony-playstation-5-digital-edition-100027598944"]
+
+def goods(url):
+    while True:
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            response = requests.get(url, headers=headers)
+            print(response.status_code)
+            r = response.text
+            r = r[r.find('"skuCode":"' + url[url.rfind('-')+1:]):]
+            status = r[r.find('availableShops')+16:]
+            status = status[:status.find(',')]
+            print(status)
+            if status != '0': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+        except: print(traceback.format_exc())
 
 if __name__ == "__main__":
     threads = []
-    for i in range(len(ozonUrls)):
-        threads.append(threading.Thread(target=(ozon), args=(ozonUrls[i],)))
-        threads[-1].start()
+    #for i in range(len(ozonUrls)):
+    #    threads.append(threading.Thread(target=(ozon), args=(ozonUrls[i],)))
+    #    threads[-1].start()
     
-    for i in range(len(wildberriesUrls)):
-        threads.append(threading.Thread(target=(wildberries), args=(wildberriesUrls[i],)))
+    #for i in range(len(wildberriesUrls)):
+    #    threads.append(threading.Thread(target=(wildberries), args=(wildberriesUrls[i],)))
+    #    threads[-1].start()
+
+    #for i in range(len(citilinkUrls)):
+    #    threads.append(threading.Thread(target=(citilink), args=(citilinkUrls[i],)))
+    #    threads[-1].start()
+
+    for i in range(len(goodsUrls)):
+        threads.append(threading.Thread(target=(goods), args=(goodsUrls[i],)))
         threads[-1].start()
