@@ -9,7 +9,8 @@ import threading
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ozonparser'
 
-urls = ["https://www.ozon.ru/context/detail/id/207702520/", 
+urls = ["https://www.ozon.ru/context/detail/id/207702519/",
+        "https://www.ozon.ru/context/detail/id/207702520/", 
         "https://www.ozon.ru/context/detail/id/216940493/",
         "https://www.ozon.ru/context/detail/id/178337786/",
         "https://www.ozon.ru/context/detail/id/173667655/",
