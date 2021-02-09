@@ -2,7 +2,6 @@
 
 import telebot
 import requests
-import time
 import traceback
 import threading
 
@@ -54,7 +53,7 @@ def goods(url):
             status = r[r.find('availableShops')+16:]
             status = status[:status.find(',')]
             print(status)
-            if status != '0': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            if status != '0' and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
 gameparkUrls = ["https://www.gamepark.ru/playstation5/console/IgrovayakonsolSonyPlayStation5/",
@@ -67,7 +66,7 @@ def gamepark(url):
             response = requests.get(url, headers=headers)
             print(response.status_code)
             r = response.text
-            if 'Нет в наличии' not in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
 if __name__ == "__main__":
