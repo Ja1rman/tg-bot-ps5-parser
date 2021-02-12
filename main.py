@@ -36,7 +36,7 @@ def wildberries(url):
             response = requests.get(url, headers=headers)
             r = response.json()
             status = r['value']['data']['addToBasketEnable']
-            if status == 'True': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            if status == 'True': bot.send_message(CHANNEL, 'https://www.wildberries.ru/catalog/' + r['value']['data']['rqCod1S'] + '/detail.aspx', disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
 goodsUrls = ["https://goods.ru/catalog/details/igrovaya-pristavka-sony-playstation-5-825gb-100026864564",
