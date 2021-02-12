@@ -52,7 +52,6 @@ def goods(url):
             r = r[r.find('"skuCode":"' + url[url.rfind('-')+1:]):]
             status = r[r.find('availableShops')+16:]
             status = status[:status.find(',')]
-            print(status)
             if status != '0' and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
