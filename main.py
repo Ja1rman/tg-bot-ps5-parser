@@ -36,7 +36,7 @@ def wildberries(url):
             response = requests.get(url, headers=headers)
             r = response.text
             status = r[r.find('isSoldOut"')+11:]
-            status = status[:status.find(',')]
+            status = status[:status.find(',"cod1S')]
             if status == 'false': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
