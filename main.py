@@ -4,9 +4,12 @@ import telebot
 import requests
 import traceback
 import multiprocessing as mp
+import time
 
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
+
+proxies = { 'https' : 'https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094' } 
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
         "https://www.ozon.ru/context/detail/id/207702520/", 
@@ -66,6 +69,46 @@ def gamepark(url):
             if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
+technoparkUrls = ["https://spb.technopark.ru/igrovaya-pristavka-sony-playstation-5-cfi-1015a/"]
+
+def technopark(url):
+    while True:
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            response = requests.get(url, headers=headers)
+            r = response.text
+            if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+        except: print(traceback.format_exc())
+
+c1Urls = ["https://www.1c-interes.ru/catalog/all6969/30328282/",
+          "https://www.1c-interes.ru/catalog/all6969/30328284/"]
+
+def c1(url, stat):
+    while True:
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            if stat == 1: response = requests.get(url, headers=headers, proxies=proxies)
+            else: response = requests.get(url, headers=headers)
+            r = response.text
+            print('----' + str(response.status_code))
+            
+            if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            time.sleep(2)
+        except: print(traceback.format_exc())
+
+def sony(url):
+    while True:
+        try: 
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            response = requests.get(url, headers=headers)
+            print(response.status_code)
+            if response.status_code == 200:
+                r = response.json()
+                for id in r['prods']:
+                    if int(r['prods'][id]['COUNT_IN_STOCK']) > 0:
+                        bot.send_message(CHANNEL, 'https://store.sony.ru/product/' + id +'\nStock: ' + r['prods'][id]['COUNT_IN_STOCK'], disable_web_page_preview=True)
+        except: print(traceback.format_exc())
+
 if __name__ == "__main__":
     threads = []
     for i in range(len(ozonUrls)):
@@ -83,3 +126,14 @@ if __name__ == "__main__":
     for i in range(len(gameparkUrls)):
         threads.append(mp.Process(target=gamepark, args=(gameparkUrls[i],)))
         threads[-1].start()
+    
+    for i in range(len(technoparkUrls)):
+        threads.append(mp.Process(target=technopark, args=(technoparkUrls[i],)))
+        threads[-1].start()
+
+    for i in range(len(c1Urls)):
+        threads.append(mp.Process(target=c1, args=(c1Urls[i], i)))
+        threads[-1].start()
+
+    threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
+    threads[-1].start()
