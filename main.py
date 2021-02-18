@@ -26,6 +26,7 @@ def ozon(url):
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
+            print(response.status_code)
             if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
