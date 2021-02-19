@@ -19,7 +19,7 @@ ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
 def ozon(url):
     while True:
         try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:85.0) Gecko/20100101 Firefox/85.0"} 
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             response = requests.get(url, headers=headers)
             r = response.text
             status = r[r.find('isAvailable')+13:]
@@ -109,7 +109,7 @@ if __name__ == "__main__":
     for i in range(len(ozonUrls)):
         threads.append(mp.Process(target=ozon, args=(ozonUrls[i],)))
         threads[-1].start()
-    '''
+    
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
         threads[-1].start()
@@ -131,5 +131,4 @@ if __name__ == "__main__":
         threads[-1].start()
 
     threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
-    threads[-1].start()'''
-    
+    threads[-1].start()
