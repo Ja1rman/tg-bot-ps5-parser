@@ -5,11 +5,12 @@ import requests
 import traceback
 import multiprocessing as mp
 import time
+import random 
 
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
 
-proxies = { 'https' : 'https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094' } 
+proxies = {'https' : 'https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094'} 
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
@@ -18,12 +19,15 @@ ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
 
 def ozon(url):
     while True:
+        i = random.randint(1000000, 10000000)
         try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
+                       "Cookie": "visid_incap_" + str(i) + "=t9OoZ8s9QmmiA02V32VWk57+MGAAAAAAQUIPAAAAAABscnPCjIOm2xBm0QclpbAL; nlbi_" + str(i) + "=2rvHM+iQlAvfJ7QVyZtWRQAAAACGNUh72NcgplIRMdL8/CKw; incap_ses_379_" + str(i) + "=UYw1O296zyoagq59wXpCBZ7+MGAAAAAAWcpcHHJPVVPkyj2lDC/feg=="}
             response = requests.get(url, headers=headers)
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
+            print(response.status_code)
             if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
@@ -109,7 +113,7 @@ if __name__ == "__main__":
     for i in range(len(ozonUrls)):
         threads.append(mp.Process(target=ozon, args=(ozonUrls[i],)))
         threads[-1].start()
-    
+    '''
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
         threads[-1].start()
@@ -131,4 +135,5 @@ if __name__ == "__main__":
         threads[-1].start()
 
     threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
-    threads[-1].start()
+    threads[-1].start()'''
+    
