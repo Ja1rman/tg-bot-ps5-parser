@@ -12,10 +12,9 @@ CHANNEL = '@ps5parser'
 proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
            "https://MiSyCcnd:qVgHXfYS@45.146.168.63:50604",
            "https://MiSyCcnd:qVgHXfYS@45.139.52.20:61733",
-           "https://MiSyCcnd:qVgHXfYS@94.154.191.244:59947"]
-
+           "https://MiSyCcnd:qVgHXfYS@94.154.191.244:59947",
+           "https://MiSyCcnd:qVgHXfYS@46.150.247.144:47822"]
 '''
-           "https://MiSyCcnd:qVgHXfYS@46.150.247.144:47822",
            "https://MiSyCcnd:qVgHXfYS@194.156.104.17:58498",
            "https://MiSyCcnd:qVgHXfYS@91.191.184.107:63847"]
 '''
@@ -96,7 +95,7 @@ def c1(url, stat):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]})
+            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[4]})
             else: response = requests.get(url, headers=headers)
             r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
