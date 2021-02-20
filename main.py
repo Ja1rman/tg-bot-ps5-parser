@@ -14,17 +14,17 @@ proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
            "https://MiSyCcnd:qVgHXfYS@194.156.104.17:58498",
            "https://MiSyCcnd:qVgHXfYS@91.191.184.107:63847"]
 
-ozonUrls = ["http://www.ozon.ru/context/detail/id/207702519/",
-            "http://www.ozon.ru/context/detail/id/207702520/", 
-            "http://www.ozon.ru/context/detail/id/178337786/",
-            "http://www.ozon.ru/context/detail/id/178715781/"]
+ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
+            "https://www.ozon.ru/context/detail/id/207702520/", 
+            "https://www.ozon.ru/context/detail/id/178337786/",
+            "https://www.ozon.ru/context/detail/id/178715781/"]
 
 def ozon(url, proxie):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             session = requests.Session()
-            response = session.get(url, headers=headers, proxies={'http' : proxie})
+            response = session.get(url, headers=headers, proxies={'https' : proxie}, verify=False)
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
@@ -90,7 +90,7 @@ def c1(url, stat):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            if stat == 1: response = requests.get(url, headers=headers, proxies={'http': proxies[0]})
+            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]}, verify=False)
             else: response = requests.get(url, headers=headers)
             r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
@@ -137,3 +137,4 @@ if __name__ == "__main__":
 
     threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
     threads[-1].start()
+    
