@@ -10,25 +10,27 @@ import random
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
 
-proxies = {'https' : 'https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094'} 
+proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
+           "https://MiSyCcnd:qVgHXfYS@46.150.247.144:47822",
+           "https://MiSyCcnd:qVgHXfYS@194.156.104.17:58498",
+           "https://MiSyCcnd:qVgHXfYS@91.191.184.107:63847"]
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
             "https://www.ozon.ru/context/detail/id/178337786/",
             "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon(url):
+def ozon(url, proxie):
     while True:
-        i = random.randint(1000000, 10000000)
         try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0",
-                       "Cookie": "visid_incap_" + str(i) + "=t9OoZ8s9QmmiA02V32VWk57+MGAAAAAAQUIPAAAAAABscnPCjIOm2xBm0QclpbAL; nlbi_" + str(i) + "=2rvHM+iQlAvfJ7QVyZtWRQAAAACGNUh72NcgplIRMdL8/CKw; incap_ses_379_" + str(i) + "=UYw1O296zyoagq59wXpCBZ7+MGAAAAAAWcpcHHJPVVPkyj2lDC/feg=="}
-            response = requests.get(url, headers=headers)
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            session = requests.Session()
+            response = session.get(url, headers=headers, proxies={'https' : proxie})
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
             print(response.status_code)
-            if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            if status == 'true': print('true')
         except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
@@ -89,7 +91,7 @@ def c1(url, stat):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            if stat == 1: response = requests.get(url, headers=headers, proxies=proxies)
+            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]})
             else: response = requests.get(url, headers=headers)
             r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
@@ -111,9 +113,9 @@ def sony(url):
 if __name__ == "__main__":
     threads = []
     for i in range(len(ozonUrls)):
-        threads.append(mp.Process(target=ozon, args=(ozonUrls[i],)))
+        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
         threads[-1].start()
-    
+
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
         threads[-1].start()
