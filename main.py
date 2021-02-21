@@ -19,7 +19,7 @@ ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/178337786/",
             "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon(url):
+def ozon():
     while True:
         for url in ozonUrls:
             try:
