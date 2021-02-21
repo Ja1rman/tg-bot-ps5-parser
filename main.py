@@ -32,7 +32,7 @@ def ozon():
                     if 'nlbi' in name or 'visid_incap' in name or 'incap_ses' in name:
                         session.cookies.set(name, '', domain='.ozon.ru')
             except: print(traceback.format_exc())
-        time.sleep(0.5)
+        time.sleep(1)
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
