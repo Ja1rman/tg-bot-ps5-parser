@@ -20,16 +20,20 @@ ozonUrls = ["http://www.ozon.ru/context/detail/id/207702519/",
             "http://www.ozon.ru/context/detail/id/178715781/"]
 
 def ozon(url, proxie):
+    session = requests.Session()
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            session = requests.Session()
-            response = session.get(url, headers=headers, proxies={'http' : proxie})
+            response = session.get(url, headers=headers)
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
             print(response.status_code)
-            if status == 'true': print('true')
+            if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            cookies = session.cookies.get_dict()
+            for name in cookies:
+                if 'nlbi' in name or 'visid_incap' in name or 'incap_ses' in name:
+                    session.cookies.set(name, '', domain='.ozon.ru')
         except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
