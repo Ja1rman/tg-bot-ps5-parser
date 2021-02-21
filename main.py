@@ -5,34 +5,32 @@ import requests
 import traceback
 import multiprocessing as mp
 import time
-import random
 
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
+
+proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
+           "https://MiSyCcnd:qVgHXfYS@92.249.12.59:52850",
+           "https://MiSyCcnd:qVgHXfYS@45.139.52.158:46229",
+           "https://MiSyCcnd:qVgHXfYS@176.103.91.220:64742"]
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
             "https://www.ozon.ru/context/detail/id/178337786/",
             "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon():
-    session = requests.Session()
+def ozon(url, proxie):
     while True:
-        for url in ozonUrls:
-            try:
-                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-                response = session.get(url, headers=headers)
-                r = response.text
-                status = r[r.find('isAvailable')+13:]
-                status = status[:status.find(',')]
-                print(response.status_code)
-                if status == 'true': bot.send_message(CHANNEL, url, disable_web_page_preview=True)
-                cookies = session.cookies.get_dict()
-                for name in cookies:
-                    if 'nlbi' in name or 'visid_incap' in name or 'incap_ses' in name:
-                        session.cookies.set(name, '', domain='.ozon.ru')
-            except: print(traceback.format_exc())
-        time.sleep(1)
+        try:
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+            session = requests.Session()
+            response = session.get(url, headers=headers, proxies={'https' : proxie})
+            r = response.text
+            status = r[r.find('isAvailable')+13:]
+            status = status[:status.find(',')]
+            print(response.status_code)
+            if status == 'true': print('true')
+        except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
@@ -85,17 +83,18 @@ def technopark(url):
             if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
-c1Urls = ["http://www.1c-interes.ru/catalog/all6969/30328282/",
-          "http://www.1c-interes.ru/catalog/all6969/30328284/"]
+c1Urls = ["https://www.1c-interes.ru/catalog/all6969/30328282/",
+          "https://www.1c-interes.ru/catalog/all6969/30328284/"]
 
-def c1(url):
+def c1(url, stat):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            session = requests.Session()
-            response = session.get(url, headers=headers)
-            r = response.text       
+            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]})
+            else: response = requests.get(url, headers=headers)
+            r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
+            time.sleep(2)
         except: print(traceback.format_exc())
 
 def sony(url):
@@ -112,10 +111,10 @@ def sony(url):
 
 if __name__ == "__main__":
     threads = []
-    
-    threads.append(mp.Process(target=ozon))
-    threads[-1].start()
-    
+    for i in range(len(ozonUrls)):
+        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
+        threads[-1].start()
+
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
         threads[-1].start()
@@ -133,7 +132,7 @@ if __name__ == "__main__":
         threads[-1].start()
 
     for i in range(len(c1Urls)):
-        threads.append(mp.Process(target=c1, args=(c1Urls[i],)))
+        threads.append(mp.Process(target=c1, args=(c1Urls[i], i)))
         threads[-1].start()
 
     threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
