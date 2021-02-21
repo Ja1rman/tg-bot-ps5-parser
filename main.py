@@ -9,22 +9,22 @@ import time
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
 
-proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
-           "https://MiSyCcnd:qVgHXfYS@92.249.12.59:52850",
-           "https://MiSyCcnd:qVgHXfYS@45.139.52.158:46229",
-           "https://MiSyCcnd:qVgHXfYS@176.103.91.220:64742"]
+proxies = ["http://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
+           "http://MiSyCcnd:qVgHXfYS@92.249.12.59:52850",
+           "http://MiSyCcnd:qVgHXfYS@45.139.52.158:46229",
+           "http://MiSyCcnd:qVgHXfYS@176.103.91.220:64742"]
 
-ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
-            "https://www.ozon.ru/context/detail/id/207702520/", 
-            "https://www.ozon.ru/context/detail/id/178337786/",
-            "https://www.ozon.ru/context/detail/id/178715781/"]
+ozonUrls = ["http://www.ozon.ru/context/detail/id/207702519/",
+            "http://www.ozon.ru/context/detail/id/207702520/", 
+            "http://www.ozon.ru/context/detail/id/178337786/",
+            "http://www.ozon.ru/context/detail/id/178715781/"]
 
 def ozon(url, proxie):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             session = requests.Session()
-            response = session.get(url, headers=headers, proxies={'https' : proxie})
+            response = session.get(url, headers=headers, proxies={'http' : proxie})
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
@@ -83,14 +83,14 @@ def technopark(url):
             if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
-c1Urls = ["https://www.1c-interes.ru/catalog/all6969/30328282/",
-          "https://www.1c-interes.ru/catalog/all6969/30328284/"]
+c1Urls = ["http://www.1c-interes.ru/catalog/all6969/30328282/",
+          "http://www.1c-interes.ru/catalog/all6969/30328284/"]
 
 def c1(url, stat):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]})
+            if stat == 1: response = requests.get(url, headers=headers, proxies={'http': proxies[0]})
             else: response = requests.get(url, headers=headers)
             r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
