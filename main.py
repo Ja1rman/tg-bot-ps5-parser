@@ -32,7 +32,7 @@ def ozon():
                 print(response.status_code)
                 if status == 'true': print('true')
             except: print(traceback.format_exc())
-        time.sleep(0.2)
+        time.sleep(0.4)
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
