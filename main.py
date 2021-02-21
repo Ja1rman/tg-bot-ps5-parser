@@ -24,12 +24,13 @@ def ozon(url, proxie):
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             session = requests.Session()
-            response = session.get(url, headers=headers, proxies={'https' : proxie})
+            response = session.get(url, headers=headers)
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
             print(response.status_code)
             if status == 'true': print('true')
+            time.sleep(0.2)
         except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
@@ -83,18 +84,17 @@ def technopark(url):
             if 'Нет в наличии' not in r and response.status_code == 200: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
         except: print(traceback.format_exc())
 
-c1Urls = ["https://www.1c-interes.ru/catalog/all6969/30328282/",
-          "https://www.1c-interes.ru/catalog/all6969/30328284/"]
+c1Urls = ["http://www.1c-interes.ru/catalog/all6969/30328282/",
+          "http://www.1c-interes.ru/catalog/all6969/30328284/"]
 
-def c1(url, stat):
+def c1(url):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            if stat == 1: response = requests.get(url, headers=headers, proxies={'https': proxies[0]})
-            else: response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers)
             r = response.text            
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
-            time.sleep(2)
+            time.sleep(4)
         except: print(traceback.format_exc())
 
 def sony(url):
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     for i in range(len(ozonUrls)):
         threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
         threads[-1].start()
-
+    
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
         threads[-1].start()
@@ -132,7 +132,7 @@ if __name__ == "__main__":
         threads[-1].start()
 
     for i in range(len(c1Urls)):
-        threads.append(mp.Process(target=c1, args=(c1Urls[i], i)))
+        threads.append(mp.Process(target=c1, args=(c1Urls[i],)))
         threads[-1].start()
 
     threads.append(mp.Process(target=sony, args=('https://store.sony.ru/common/ajax_product.php?action=refresh_product_state&p_ids=[317406,317400]',)))
