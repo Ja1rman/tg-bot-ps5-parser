@@ -19,19 +19,20 @@ ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/178337786/",
             "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon(url, proxie):
+def ozon(url):
     while True:
-        try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            session = requests.Session()
-            response = session.get(url, headers=headers)
-            r = response.text
-            status = r[r.find('isAvailable')+13:]
-            status = status[:status.find(',')]
-            print(response.status_code)
-            if status == 'true': print('true')
-            time.sleep(0.2)
-        except: print(traceback.format_exc())
+        for url in ozonUrls:
+            try:
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
+                session = requests.Session()
+                response = session.get(url, headers=headers)
+                r = response.text
+                status = r[r.find('isAvailable')+13:]
+                status = status[:status.find(',')]
+                print(response.status_code)
+                if status == 'true': print('true')
+            except: print(traceback.format_exc())
+        time.sleep(0.2)
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
@@ -92,7 +93,8 @@ def c1(url):
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             response = requests.get(url, headers=headers)
-            r = response.text            
+            r = response.text       
+            print('===', response.status_code)     
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
             time.sleep(4)
         except: print(traceback.format_exc())
@@ -111,9 +113,9 @@ def sony(url):
 
 if __name__ == "__main__":
     threads = []
-    for i in range(len(ozonUrls)):
-        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
-        threads[-1].start()
+    
+    threads.append(mp.Process(target=ozon))
+    threads[-1].start()
     
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
