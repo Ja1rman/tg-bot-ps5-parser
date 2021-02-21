@@ -32,6 +32,7 @@ def ozon():
                     if 'nlbi' in name or 'visid_incap' in name or 'incap_ses' in name:
                         session.cookies.set(name, '', domain='.ozon.ru')
             except: print(traceback.format_exc())
+        time.sleep(0.5)
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
@@ -87,15 +88,14 @@ def technopark(url):
 c1Urls = ["http://www.1c-interes.ru/catalog/all6969/30328282/",
           "http://www.1c-interes.ru/catalog/all6969/30328284/"]
 
-def c1():
+def c1(url):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            response = requests.get(url, headers=headers)
+            session = requests.Session()
+            response = session.get(url, headers=headers)
             r = response.text       
-            print('===', response.status_code)     
             if 'Перейти в корзину' in r: bot.send_message(CHANNEL, url, disable_web_page_preview=True)
-            time.sleep(random.randint(2, 5))
         except: print(traceback.format_exc())
 
 def sony(url):
