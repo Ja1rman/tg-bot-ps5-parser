@@ -19,7 +19,9 @@ proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
             "https://www.ozon.ru/context/detail/id/178337786/",
-            "https://www.ozon.ru/context/detail/id/178715781/"]
+            "https://www.ozon.ru/context/detail/id/178715781/",
+            "https://www.ozon.ru/context/detail/id/173667655/",
+            "https://www.ozon.ru/context/detail/id/216940493/"]
 
 def ozon(url, proxie):
     while True:
