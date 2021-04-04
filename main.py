@@ -135,9 +135,9 @@ def sony(url):
 if __name__ == "__main__":
     threads = []
     
-    #for i in range(len(ozonUrls)):
-    #    threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
-    #    threads[-1].start()
+    for i in range(len(ozonUrls)):
+        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
+        threads[-1].start()
     
     for i in range(len(wildberriesUrls)):
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
