@@ -11,20 +11,23 @@ import discord_webhook
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
 
-proxies = ["http://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
-           "http://MiSyCcnd:qVgHXfYS@195.216.216.110:62422"]
+proxies = ["http://MiSyCcnd:qVgHXfYS@195.216.216.110:62422",
+           "http://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
+           "http://MiSyCcnd:qVgHXfYS@91.188.214.100:62009",
+           "http://MiSyCcnd:qVgHXfYS@77.83.81.148:57289",
+           "http://MiSyCcnd:qVgHXfYS@45.94.23.179:56221"]
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
             "https://www.ozon.ru/context/detail/id/178337786/",
             "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon(url):
+def ozon(url, proxy):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             session = requests.Session()
-            response = session.get(url, headers=headers)
+            response = session.get(url, headers=headers, proxies={'https' : proxy, 'http': proxy})
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
@@ -132,11 +135,11 @@ if __name__ == "__main__":
     threads = []
     
     for i in range(len(ozonUrls)):
-        threads.append(mp.Process(target=ozon, args=(ozonUrls[i],)))
+        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i+1])))
         threads[-1].start()
     
     for i in range(len(wildberriesUrls)):
-        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[i], 'спб' if i == 1 else 'мск')))
+        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[i], 'спб' if i == 0 else 'мск')))
         threads[-1].start()
 
     for i in range(len(goodsUrls)):
