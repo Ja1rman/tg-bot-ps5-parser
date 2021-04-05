@@ -11,48 +11,44 @@ import discord_webhook
 bot = telebot.TeleBot('1680508706:AAGu_zrjj1X9BzYMNUhb3CW1E7ABey4Ft8Q')
 CHANNEL = '@ps5parser'
 
-proxies = ["https://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
-           "https://MiSyCcnd:qVgHXfYS@92.249.12.59:52850",
-           "https://MiSyCcnd:qVgHXfYS@45.139.52.158:46229",
-           "https://MiSyCcnd:qVgHXfYS@176.103.91.220:64742"]
+proxies = ["http://MiSyCcnd:qVgHXfYS@45.138.147.177:53094",
+           "http://MiSyCcnd:qVgHXfYS@195.216.216.110:62422"]
 
 ozonUrls = ["https://www.ozon.ru/context/detail/id/207702519/",
             "https://www.ozon.ru/context/detail/id/207702520/", 
             "https://www.ozon.ru/context/detail/id/178337786/",
-            "https://www.ozon.ru/context/detail/id/178715781/",
-            "https://www.ozon.ru/context/detail/id/173667655/",
-            "https://www.ozon.ru/context/detail/id/216940493/"]
+            "https://www.ozon.ru/context/detail/id/178715781/"]
 
-def ozon(url, proxie):
+def ozon(url):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
             session = requests.Session()
-            response = session.get(url, headers=headers, proxies={'https' : proxie})
+            response = session.get(url, headers=headers)
             r = response.text
             status = r[r.find('isAvailable')+13:]
             status = status[:status.find(',')]
-            print(response.status_code)
             if status == 'true': 
                 bot.send_message(CHANNEL, url, disable_web_page_preview=True)
                 discord_webhook.DiscordWebhook(url='https://discord.com/api/webhooks/808402021770199120/6PWBz6hao8__SEL7pFhtJDjbAZ5hhJ6rLBJuvhGdMnlD3p8fKgSDfrkt92tkT6G6SyPQ', 
                                                 content=url).execute()
+            time.sleep(0)
         except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
                    "https://www.wildberries.ru/15298663/product/data"]
 
-def wildberries(url):
+def wildberries(url, proxy, city):
     while True:
         try:
             headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:84.0) Gecko/20100101 Firefox/84.0"} 
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, proxies={'https' : proxy, 'http': proxy})
             r = response.json()
             status = r['value']['data']['addToBasketEnable']
             if status == 'True': 
-                bot.send_message(CHANNEL, 'https://www.wildberries.ru/catalog/' + r['value']['data']['rqCod1S'] + '/detail.aspx', disable_web_page_preview=True)
+                bot.send_message(CHANNEL, city + '\nhttps://www.wildberries.ru/catalog/' + r['value']['data']['rqCod1S'] + '/detail.aspx', disable_web_page_preview=True)
                 discord_webhook.DiscordWebhook(url='https://discord.com/api/webhooks/808402021770199120/6PWBz6hao8__SEL7pFhtJDjbAZ5hhJ6rLBJuvhGdMnlD3p8fKgSDfrkt92tkT6G6SyPQ', 
-                                                content='https://www.wildberries.ru/catalog/' + r['value']['data']['rqCod1S'] + '/detail.aspx').execute()
+                                                content=city + '\nhttps://www.wildberries.ru/catalog/' + r['value']['data']['rqCod1S'] + '/detail.aspx').execute()
         except: print(traceback.format_exc())
 
 goodsUrls = ["https://goods.ru/catalog/details/igrovaya-pristavka-sony-playstation-5-825gb-100026864564",
@@ -136,11 +132,11 @@ if __name__ == "__main__":
     threads = []
     
     for i in range(len(ozonUrls)):
-        threads.append(mp.Process(target=ozon, args=(ozonUrls[i], proxies[i])))
+        threads.append(mp.Process(target=ozon, args=(ozonUrls[i],)))
         threads[-1].start()
     
     for i in range(len(wildberriesUrls)):
-        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i],)))
+        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[i], 'спб' if i == 1 else 'мск')))
         threads[-1].start()
 
     for i in range(len(goodsUrls)):
