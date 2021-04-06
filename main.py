@@ -35,7 +35,6 @@ def ozon(url, proxy):
                 bot.send_message(CHANNEL, url, disable_web_page_preview=True)
                 discord_webhook.DiscordWebhook(url='https://discord.com/api/webhooks/808402021770199120/6PWBz6hao8__SEL7pFhtJDjbAZ5hhJ6rLBJuvhGdMnlD3p8fKgSDfrkt92tkT6G6SyPQ', 
                                                 content=url).execute()
-            time.sleep(0)
         except: print(traceback.format_exc())
 
 wildberriesUrls = ["https://www.wildberries.ru/15298664/product/data",
@@ -139,7 +138,11 @@ if __name__ == "__main__":
         threads[-1].start()
     
     for i in range(len(wildberriesUrls)):
-        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[i], 'спб' if i == 0 else 'мск')))
+        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[0], 'спб')))
+        threads[-1].start()
+
+    for i in range(len(wildberriesUrls)):
+        threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[1], 'мск')))
         threads[-1].start()
 
     for i in range(len(goodsUrls)):
