@@ -145,9 +145,9 @@ if __name__ == "__main__":
         threads.append(mp.Process(target=wildberries, args=(wildberriesUrls[i], proxies[1], 'мск')))
         threads[-1].start()
 
-    for i in range(len(goodsUrls)):
-        threads.append(mp.Process(target=goods, args=(goodsUrls[i],)))
-        threads[-1].start()
+    #for i in range(len(goodsUrls)):
+    #    threads.append(mp.Process(target=goods, args=(goodsUrls[i],)))
+    #    threads[-1].start()
 
     for i in range(len(gameparkUrls)):
         threads.append(mp.Process(target=gamepark, args=(gameparkUrls[i],)))
